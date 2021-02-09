@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class AuthenticationService implements AuthenticationProvider {
     private UserMapper userMapper;
     private HashService hashService;
+    private User authenticatedUser;
 
     public AuthenticationService(UserMapper userMapper, HashService hashService) {
         this.userMapper = userMapper;
@@ -25,17 +26,22 @@ public class AuthenticationService implements AuthenticationProvider {
         String userName = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        User user = userMapper.getUser(userName);
+        User user = userMapper.getUserId(userName);
 
         if(user != null){
             String encodedSalt = user.getSalt();
             String hashedPassword = hashService.getHashedValue(password, encodedSalt);
             if(user.getPassword().equals(hashedPassword)){
+                this.authenticatedUser = user;
                 return new UsernamePasswordAuthenticationToken(userName, password, new ArrayList<>());
             }
         }
 
         return null;
+    }
+
+    public User getAuthenticatedUser(){
+        return this.authenticatedUser;
     }
 
     @Override
