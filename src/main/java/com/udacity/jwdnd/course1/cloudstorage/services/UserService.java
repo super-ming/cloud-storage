@@ -12,13 +12,14 @@ public class UserService {
     private final UserMapper userMapper;
     private final HashService hashService;
 
+
     public UserService(UserMapper userMapper, HashService hashService){
         this.userMapper = userMapper;
         this.hashService = hashService;
     }
 
-    public boolean isUsernameAvailable(String username) {
-        return userMapper.getUser(username) == null;
+    public boolean isUsernameAvailable(String userName) {
+        return userMapper.getUserId(userName) == null;
     }
 
     public Integer createUser(User user){
@@ -30,7 +31,12 @@ public class UserService {
         return userMapper.insert(new User(null, user.getUserName(), encodedSalt, hashedPassword, user.getFirstName(), user.getLastName()));
     }
 
-    public User getUser(String userName) {
-        return userMapper.getUser(userName);
+    public User getUser(String userName) throws NullPointerException {
+        if(!isUsernameAvailable(userName)){
+            throw new NullPointerException();
+        }
+        User user = userMapper.getUser(userName);
+        return user;
     }
+
 }
