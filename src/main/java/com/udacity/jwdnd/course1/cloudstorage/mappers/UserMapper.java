@@ -8,13 +8,13 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface UserMapper {
-    @Select("SELECT userid FROM USERS WHERE username = #{userName}")
-    User getUserId(String userName);
+    @Select("SELECT userid FROM USERS WHERE username=#{username}")
+    User getUserId(String username);
 
-    @Select("SELECT * FROM USERS WHERE userid = #{userName}")
-    User getUser(String userName);
+    @Select("SELECT * FROM USERS WHERE username=#{username}")
+    User getUser(String username);
 
-    @Insert("INSERT INTO USERS (username, salt, password, firstname, lastname) VALUES(#{userName}, #{salt}, #{password}, #{firstName}, #{lastName})")
+    @Insert("INSERT INTO USERS (username, salt, password, firstname, lastname) VALUES(#{username}, #{salt}, #{password}, #{firstName}, #{lastName})")
     @Options(useGeneratedKeys = true, keyProperty = "userId")
     int insert(User user);
 }
