@@ -41,15 +41,15 @@ public class LoginController {
     }
 
     @PostMapping()
-    public String loginUser(@ModelAttribute User user, Model model) {
-        Authentication result = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
+    public String loginUser(@RequestParam("username") String userName, @RequestParam("password") String password, Model model) {
+        Authentication result = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password));
         SecurityContextHolder.getContext().setAuthentication(result);
-        User loggedUser = userService.getUser(user.getUserName());
+        User loggedUser = userService.getUser(userName);
         authenticationService.setAuthenticatedUser(loggedUser);
         if(loggedUser != null){
             return "redirect:/home";
         }
-        model.addAttribute("user", user.getUserName());
+        model.addAttribute("user", userName);
         return "login";
     }
 }

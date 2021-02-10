@@ -27,7 +27,6 @@ public class AuthenticationService implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
 
         User user = userMapper.getUser(userName);
-        System.out.println(user.getPassword());
 
         if(user != null){
             String encodedSalt = user.getSalt();
@@ -42,11 +41,11 @@ public class AuthenticationService implements AuthenticationProvider {
     }
 
     public User getAuthenticatedUser(){
-        return this.authenticatedUser;
+        return authenticatedUser;
     }
 
     public String setAuthenticatedUser(User user){
-        this.authenticatedUser = user;
+        authenticatedUser = user;
         return user.getUserName();
     }
 

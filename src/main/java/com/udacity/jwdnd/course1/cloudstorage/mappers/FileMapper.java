@@ -15,12 +15,15 @@ public interface FileMapper {
 
     @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid, filedata) VALUES (#{fileName}, #{contentType}, #{fileSize}, #{userId}, #{fileData})")
     @Options(useGeneratedKeys = true, keyProperty = "fileId")
-    int insertFile(File file);
+    Integer insertFile(File file);
 
     @Update("UPDATE FILES SET filename=#{fileName}, contenttype=#{contentType}, filesize=#{fileSize}, filedata=#{fileData}")
     @Options(useGeneratedKeys = true, keyProperty = "fileId")
-    int updateFile(File file);
+    Integer updateFile(File file);
 
-    @Delete("DELETE FROM FILES WHERE fileid = #{fileId}")
-    void deleteFile(Integer fileId);
+    @Delete("DELETE FROM FILES WHERE userid = #{userId} AND filename = #{fileName}")
+    void deleteFile(Integer userId, String fileName);
+
+    @Select("SELECT * FROM FILES WHERE userid = #{userId} AND filename = #{fileName}")
+    File checkFileNameExists(Integer userId, String fileName);
 }
