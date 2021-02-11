@@ -1,7 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controllers;
 
 import com.udacity.jwdnd.course1.cloudstorage.models.File;
-import com.udacity.jwdnd.course1.cloudstorage.models.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.AuthenticationService;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +15,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-
 @Controller
 public class FileController {
     @Autowired
     private FileService fileService;
     @Autowired
     private final AuthenticationService authenticationService;
-    private final User authenticatedUser;
 
     public FileController(FileService fileService, AuthenticationService authenticationService) {
         this.fileService = fileService;
         this.authenticationService = authenticationService;
-        this.authenticatedUser = authenticationService.getAuthenticatedUser();
     }
 
     @GetMapping("/files/{fileName}")
@@ -54,9 +49,10 @@ public class FileController {
             redirectAttributes.addFlashAttribute("message",
                     "Please select a file to upload.");
             return "redirect:/home";
-        } else if(fileService.getIsFileNameAvailable(file.getOriginalFilename())){
+        } else if(!fileService.getIsFileNameAvailable(file.getOriginalFilename())){
             redirectAttributes.addFlashAttribute("message",
                     "A file with this name already exists. Please select a different file name.");
+            redirectAttributes.addAttribute("duplicationFileNameError","A file with this name already exists. Please select a different file name." );
             return "redirect:/home";
         }
 
@@ -69,8 +65,7 @@ public class FileController {
         }
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
-        model.addAttribute("allFiles", fileService.getFiles(authenticationService.getAuthenticatedUser().getUserId()));
-
+        model.addAttribute("allFiles", fileService.getFiles());
         return "home";
     }
 

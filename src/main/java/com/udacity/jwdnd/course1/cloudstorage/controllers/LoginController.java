@@ -46,6 +46,7 @@ public class LoginController {
         SecurityContextHolder.getContext().setAuthentication(result);
         User loggedUser = userService.getUser(userName);
         authenticationService.setAuthenticatedUser(loggedUser);
+        System.out.println("logged" + authenticationService.getAuthenticatedUser());
         if(loggedUser != null){
             return "redirect:/home";
         }
