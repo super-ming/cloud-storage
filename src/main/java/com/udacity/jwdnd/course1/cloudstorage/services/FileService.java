@@ -21,24 +21,35 @@ public class FileService {
         this.authenticatedService = authenticationService;
     }
 
-    public boolean getIsFileNameAvailable(Integer userId, String fileName){
-        Boolean fileFound = fileMapper.checkFileNameExists(userId, fileName) != null;
+    public boolean getIsFileNameAvailable(String fileName){
+        User user = authenticatedService.getAuthenticatedUser();
+        Boolean fileFound = fileMapper.checkFileNameExists(user.getUserId(), fileName) != null;
         return fileFound;
     }
 
     //get file
-    public File getFile(Integer userId, String fileName){
-        return fileMapper.getFile(userId, fileName);
+    public File getFile(String fileName){
+        File file = null;
+        User user = authenticatedService.getAuthenticatedUser();
+        try{
+            file = fileMapper.getFile(user.getUserId(), fileName);
+        } catch (NullPointerException error){
+            error.printStackTrace();
+            throw error;
+        }
+        System.out.println(file);
+        return file;
     }
 
     public List<File> getFiles(Integer userId){
-        return fileMapper.getFiles(userId);
+        User user = authenticatedService.getAuthenticatedUser();
+        return fileMapper.getFiles(user.getUserId());
     }
 
     //add file
     public int addFile(MultipartFile file){
+        User user = authenticatedService.getAuthenticatedUser();
         try {
-            User user = authenticatedService.getAuthenticatedUser();
             Integer newFileId = fileMapper.insertFile(new File(null, file.getOriginalFilename(), file.getContentType(),
                     Long.toString(file.getSize()), user.getUserId(), file.getBytes()));
             return newFileId;
@@ -62,7 +73,8 @@ public class FileService {
     }
 
     //delete file
-    public void deleteFile(Integer userId, String fileName) {
-        fileMapper.deleteFile(userId, fileName);
+    public void deleteFile(String fileName) {
+        User user = authenticatedService.getAuthenticatedUser();
+        fileMapper.deleteFile(user.getUserId(), fileName);
     }
 }

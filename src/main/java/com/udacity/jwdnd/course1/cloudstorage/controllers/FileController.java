@@ -32,14 +32,15 @@ public class FileController {
         this.authenticatedUser = authenticationService.getAuthenticatedUser();
     }
 
-    @GetMapping("/files/{filename:.+}")
+    @GetMapping("/files/{fileName}")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename, Authentication authentication) {
+    public ResponseEntity<Resource> serveFile(@PathVariable String fileName, Authentication authentication) {
 
-        File file = fileService.getFile(authenticatedUser.getUserId(), filename);
+        File file = fileService.getFile(fileName);
+        System.out.println("controller"+ file);
         try {
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                    "attachment; filename=" + file.getFileName()).contentLength(file.getFileData().length)
+                    "attachment; fileName=" + file.getFileName()).contentLength(file.getFileData().length)
                     .body(new ByteArrayResource(file.getFileData()));
         } catch (Exception error){
             return ResponseEntity.badRequest().build();
@@ -48,34 +49,36 @@ public class FileController {
 
     @PostMapping("/file/upload")
     public String handleFileUpload(@RequestParam("fileUpload") MultipartFile file, Authentication authentication,
-    RedirectAttributes redirectAttributes, Model model) {
+    RedirectAttributes redirectAttributes, Model model) throws Exception {
         if(file.isEmpty()){
             redirectAttributes.addFlashAttribute("message",
                     "Please select a file to upload.");
             return "redirect:/home";
-        } else if(fileService.getIsFileNameAvailable(authenticationService.getAuthenticatedUser().getUserId(), file.getOriginalFilename())){
+        } else if(fileService.getIsFileNameAvailable(file.getOriginalFilename())){
             redirectAttributes.addFlashAttribute("message",
                     "A file with this name already exists. Please select a different file name.");
             return "redirect:/home";
         }
 
         int fileId = fileService.addFile(file);
+
         if(fileId < 0){
             redirectAttributes.addFlashAttribute("message",
                     "Something went wrong with the upload. Please try again");
             return "redirect:/home";
         }
         redirectAttributes.addFlashAttribute("message",
-        "You successfully uploaded " + file.getOriginalFilename() + "!");
+                "You successfully uploaded " + file.getOriginalFilename() + "!");
         model.addAttribute("allFiles", fileService.getFiles(authenticationService.getAuthenticatedUser().getUserId()));
+
         return "home";
     }
 
-    @PutMapping("/file/delete/{fileName:.+}")
+    @GetMapping("/files/delete/{fileName}")
     public String deleteFile(@PathVariable String fileName, Authentication authentication, RedirectAttributes redirectAttributes){
-        fileService.deleteFile(authenticatedUser.getUserId(), fileName);
+        fileService.deleteFile(fileName);
         redirectAttributes.addFlashAttribute("deleteSuccess","Successfully deleted " + fileName);
-        return "redirect:/result";
+        return "redirect:/result?success=true";
     }
 
 }
