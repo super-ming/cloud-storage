@@ -20,8 +20,8 @@ public interface NoteMapper {
     @Update("UPDATE NOTES SET notetitle=#{noteTitle}, notedescription=#{noteDescription} WHERE noteid=#{noteId} AND userid = #{userId}")
     int editNote(Integer noteId, String noteTitle, String noteDescription, Integer userId);
 
-    @Delete("DELETE FROM NOTES WHERE userid = #{userId} AND notetitle = #{noteTitle}")
-    void deleteNote(Integer userId, String noteTitle);
+    @Delete("DELETE FROM NOTES WHERE userid = #{userId} AND noteid = #{noteId}")
+    void deleteNote(Integer userId, Integer noteId);
 
     @Select("SELECT * FROM NOTES WHERE userid = #{userId} AND notetitle = #{noteTitle}")
     Note checkNoteTitleExists(Integer userId, String noteTitle);

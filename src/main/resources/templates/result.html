@@ -18,9 +18,21 @@
                 <h1 class="display-5">Error</h1>
                 <span>Your changes were not saved. Click <a th:href="@{/home}">here</a> to continue.</span>
             </div>
+            <div class="alert alert-danger fill-parent" th:if="${param.noFileError}">
+                <h1 class="display-5">Error</h1>
+                <span>You did not select a file to upload. Click <a th:href="@{/home}">here</a> to continue.</span>
+            </div>
+            <div class="alert alert-danger fill-parent" th:if="${param.duplicationFileNameError}">
+                <h1 class="display-5">Error</h1>
+                <span>A file with this name already exists. Please select a different file name. Click <a th:href="@{/home}">here</a> to continue.</span>
+            </div>
+            <div class="alert alert-danger fill-parent" th:if="${param.badCredentialsError}">
+                <h1 class="display-5">Error</h1>
+                <span>Wrong username or password. Click <a th:href="@{/home}">here</a> to continue.</span>
+            </div>
             <div class="alert alert-danger fill-parent" th:if="${error}">
                 <h1 class="display-5">Error</h1>
-                <span th:text"@{error}">Your changes were not saved.</span>
+                <span th:text="@{error}">Your changes were not saved.</span>
                 <span>Click <a th:href="@{/home}">here</a> to continue.</span>
             </div>
         </div>

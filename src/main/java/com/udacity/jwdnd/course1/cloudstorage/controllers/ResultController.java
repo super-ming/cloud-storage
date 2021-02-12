@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/result")
 public class ResultController {
     @GetMapping()
-    public String resultView(Authentication authentication) {
+    public String resultView() {
         return "result";
     }
 }

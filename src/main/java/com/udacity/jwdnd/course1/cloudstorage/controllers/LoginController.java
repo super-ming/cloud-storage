@@ -26,9 +26,6 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    //private Logger log;
-
     public LoginController(AuthenticationManager authenticationManager, AuthenticationService authenticationService, UserService userService, Logger log) {
         this.authenticationManager = authenticationManager;
         this.authenticationService = authenticationService;
@@ -46,11 +43,12 @@ public class LoginController {
         SecurityContextHolder.getContext().setAuthentication(result);
         User loggedUser = userService.getUser(userName);
         authenticationService.setAuthenticatedUser(loggedUser);
-        System.out.println("logged" + authenticationService.getAuthenticatedUser());
+        String loginError = null;
         if(loggedUser != null){
             return "redirect:/home";
         }
-        model.addAttribute("user", userName);
+        loginError = "Invalid username or password";
+        model.addAttribute("loginError", loginError);
         return "login";
     }
 }

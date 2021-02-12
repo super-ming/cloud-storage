@@ -15,13 +15,10 @@ public class FileService {
     @Autowired
     private final FileMapper fileMapper;
     @Autowired
-    private final UserService userService;
-    @Autowired
     private final AuthenticationService authenticationService;
 
-    public FileService(FileMapper fileMapper, UserService userService, AuthenticationService authenticationService) {
+    public FileService(FileMapper fileMapper, AuthenticationService authenticationService) {
         this.fileMapper = fileMapper;
-        this.userService = userService;
         this.authenticationService = authenticationService;
     }
 

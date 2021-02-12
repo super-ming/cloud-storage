@@ -21,12 +21,6 @@ public class NoteService {
         this.authenticationService = authenticationService;
     }
 
-    public boolean getIsNoteTitleAvailable(String fileName){
-        User user = authenticationService.getAuthenticatedUser();
-        Boolean foundNote = noteMapper.checkNoteTitleExists(user.getUserId(), fileName) != null;
-        return !foundNote;
-    }
-
     public Note getNote(Integer noteId){
         User user = authenticationService.getAuthenticatedUser();
         try{
@@ -66,8 +60,8 @@ public class NoteService {
         }
     }
 
-    public void deleteNote(String noteTitle) {
+    public void deleteNote(Integer noteId) {
         User user = authenticationService.getAuthenticatedUser();
-        noteMapper.deleteNote(user.getUserId(), noteTitle);
+        noteMapper.deleteNote(user.getUserId(), noteId);
     }
 }

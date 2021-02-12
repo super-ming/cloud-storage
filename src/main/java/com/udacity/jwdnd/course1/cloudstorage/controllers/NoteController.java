@@ -2,44 +2,23 @@ package com.udacity.jwdnd.course1.cloudstorage.controllers;
 
 import com.udacity.jwdnd.course1.cloudstorage.models.Note;
 import com.udacity.jwdnd.course1.cloudstorage.models.NoteForm;
-import com.udacity.jwdnd.course1.cloudstorage.services.AuthenticationService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 @Controller
 public class NoteController {
     @Autowired
     private NoteService noteService;
-    @Autowired
-    private final AuthenticationService authenticationService;
 
-    public NoteController(NoteService noteService, AuthenticationService authenticationService) {
+    public NoteController(NoteService noteService) {
         this.noteService = noteService;
-        this.authenticationService = authenticationService;
-    }
-
-    @GetMapping("/notes")
-    public void getNotes(Authentication authentication,
-                    RedirectAttributes redirectAttributes, Model model){
-        List<Note> notes = null;
-        try {
-            notes = noteService.getNotes();
-            model.addAttribute("allNotes", notes);
-        } catch (Exception error){
-            error.printStackTrace();
-        }
     }
 
     @PostMapping("/notes/add")
-    public String addNote(@ModelAttribute("noteForm") NoteForm noteForm, Authentication authentication,
-                          RedirectAttributes redirectAttributes, Model model){
+    public String addNote(@ModelAttribute("noteForm") NoteForm noteForm){
         try {
             Note note = noteService.getNote(noteForm.getNoteId());
             if(note != null){
@@ -47,38 +26,32 @@ public class NoteController {
             } else {
                 noteService.addNote(noteForm);
             }
-            model.addAttribute("allNotes", noteService.getNotes());
-            return "redirect:/home";
+            return "redirect:/result?success=true";
         } catch (Exception error){
             error.printStackTrace();
-            model.addAttribute("error", error);
             return "redirect:/result?error";
         }
     }
 
     @GetMapping("/notes/edit")
-    public String editNote(@ModelAttribute("noteForm") NoteForm noteForm, Authentication authentication,
-                         RedirectAttributes redirectAttributes, Model model){
-        List<Note> notes = null;
+    public String editNote(@ModelAttribute("noteForm") NoteForm noteForm, Model model){
         try {
-            Integer status = noteService.editNote(noteForm);
-            notes = noteService.getNotes();
-            if(status == 0){
-                model.addAttribute("allNotes", notes);
-            }
+            noteService.editNote(noteForm);
             return "redirect:/result?success";
         } catch (Exception error){
             error.printStackTrace();
-            model.addAttribute("error", error);
             return "redirect:/result?error";
         }
     }
 
-    @GetMapping("/notes/delete/{noteTitle}")
-    public String deleteNote(@PathVariable String noteTitle, Authentication authentication,
-                             RedirectAttributes redirectAttributes, Model model) {
-        noteService.deleteNote(noteTitle);
-        redirectAttributes.addFlashAttribute("deleteSuccess","Successfully deleted " + noteTitle);
-        return "redirect:/result?success=true";
+    @GetMapping("/notes/delete/{noteId}")
+    public String deleteNote(@PathVariable Integer noteId) {
+        try {
+            noteService.deleteNote(noteId);
+            return "redirect:/result?success=true";
+        } catch (Exception error){
+            error.printStackTrace();
+            return "redirect:/result?error";
+        }
     }
 }

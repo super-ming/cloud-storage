@@ -15,28 +15,21 @@ import java.util.List;
 @Controller
 @RequestMapping("/home")
 public class HomeController {
-    @Autowired
-    private final UserService userService;
-    @Autowired
     private final FileService fileService;
     @Autowired
     private final NoteService noteService;
     @Autowired
-    private final AuthenticationService authenticationService;
-    @Autowired
     private final CredentialService credentialService;
 
-    public HomeController(UserService userService, FileService fileService, NoteService noteService,
-                          AuthenticationService authenticationService, CredentialService credentialService) {
-        this.userService = userService;
+    public HomeController(FileService fileService, NoteService noteService,
+                          CredentialService credentialService) {
         this.fileService = fileService;
         this.noteService = noteService;
-        this.authenticationService = authenticationService;
         this.credentialService = credentialService;
     }
 
     @GetMapping()
-    public String homeView(@ModelAttribute("noteForm") NoteForm noteForm, @ModelAttribute("credentialForm") CredentialForm credentialForm, FileService fileService, AuthenticationService authenticationService, Model model) {
+    public String homeView(@ModelAttribute("noteForm") NoteForm noteForm, @ModelAttribute("credentialForm") CredentialForm credentialForm, Model model) {
         List<File> files;
 
         try {
