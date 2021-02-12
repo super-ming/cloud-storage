@@ -40,13 +40,13 @@ public class NoteController {
     @PostMapping("/notes/add")
     public String addNote(@ModelAttribute("noteForm") NoteForm noteForm, Authentication authentication,
                           RedirectAttributes redirectAttributes, Model model){
-        List<Note> notes = null;
         try {
-            Note note = noteService.getNote(noteForm.getNoteTitle());
+            Note note = noteService.getNote(noteForm.getNoteId());
             if(note != null){
+                noteService.editNote(noteForm);
+            } else {
                 noteService.addNote(noteForm);
             }
-            noteService.editNote(noteForm);
             model.addAttribute("allNotes", noteService.getNotes());
             return "redirect:/home";
         } catch (Exception error){

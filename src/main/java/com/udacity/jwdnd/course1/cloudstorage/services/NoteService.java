@@ -27,17 +27,14 @@ public class NoteService {
         return !foundNote;
     }
 
-    public Note getNote(String noteTitle){
-        Note note = null;
+    public Note getNote(Integer noteId){
         User user = authenticationService.getAuthenticatedUser();
         try{
-            note = noteMapper.getNote(user.getUserId(), noteTitle);
+            return noteMapper.getNote(user.getUserId(), noteId);
         } catch (NullPointerException error){
             error.printStackTrace();
             throw error;
         }
-        System.out.println(note);
-        return note;
     }
 
     public List<Note> getNotes(){
@@ -60,8 +57,8 @@ public class NoteService {
     public int editNote(NoteForm noteForm){
         User user = authenticationService.getAuthenticatedUser();
         try {
-            Note note = noteMapper.getNote(user.getUserId(), noteForm.getNoteTitle());
-            Integer updatedStatus = noteMapper.editNote(new Note(note.getNoteId(), noteForm.getNoteTitle(), noteForm.getNoteDescription(), user.getUserId()));
+            Note note = noteMapper.getNote(user.getUserId(), noteForm.getNoteId());
+            Integer updatedStatus = noteMapper.editNote(noteForm.getNoteId(), noteForm.getNoteTitle(), noteForm.getNoteDescription(), user.getUserId());
             return updatedStatus;
         } catch (Exception error) {
             error.printStackTrace();
