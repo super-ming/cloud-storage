@@ -32,7 +32,6 @@ public class FileController {
     public ResponseEntity<Resource> serveFile(@PathVariable String fileName, Authentication authentication) {
 
         File file = fileService.getFile(fileName);
-        System.out.println("controller"+ file);
         try {
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                     "attachment; fileName=" + file.getFileName()).contentLength(file.getFileData().length)
