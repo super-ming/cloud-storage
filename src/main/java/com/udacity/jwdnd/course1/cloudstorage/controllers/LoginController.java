@@ -3,8 +3,6 @@ package com.udacity.jwdnd.course1.cloudstorage.controllers;
 import com.udacity.jwdnd.course1.cloudstorage.models.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.AuthenticationService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,7 +24,7 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    public LoginController(AuthenticationManager authenticationManager, AuthenticationService authenticationService, UserService userService, Logger log) {
+    public LoginController(AuthenticationManager authenticationManager, AuthenticationService authenticationService, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.authenticationService = authenticationService;
         this.userService = userService;
