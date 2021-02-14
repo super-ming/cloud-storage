@@ -58,17 +58,6 @@ public class FileService {
         }
     }
 
-    public int updateFile(MultipartFile file){
-        User user = authenticationService.getAuthenticatedUser();
-        try {
-            return fileMapper.updateFile(new File(null,file.getOriginalFilename(), file.getContentType(),
-                    Long.toString(file.getSize()), user.getUserId(), file.getBytes()));
-        } catch (IOException error) {
-            error.printStackTrace();
-        }
-        return 0;
-
-    }
 
     public void deleteFile(String fileName) {
         User user = authenticationService.getAuthenticatedUser();

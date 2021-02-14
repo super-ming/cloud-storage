@@ -27,14 +27,10 @@ public class CredentialService {
         this.encryptionService = encryptionService;
     }
 
-    public Credential getCredential(Integer credentialId){
+    public boolean getIsUserNameAvailable(String userName){
         User user = authenticationService.getAuthenticatedUser();
-        try{
-            return credentialMapper.getCredential(user.getUserId(), credentialId);
-        } catch (NullPointerException error){
-            error.printStackTrace();
-            throw error;
-        }
+        Boolean userNameFound = credentialMapper.checkUserNameExists(user.getUserId(), userName) != null;
+        return !userNameFound;
     }
 
     public List<Credential> getCredentials(){

@@ -26,6 +26,14 @@
                 <h1 class="display-5">Error</h1>
                 <span>A file with this name already exists. Please select a different file name. Click <a id="file-name-redirect" th:href="@{/home}">here</a> to continue.</span>
             </div>
+            <div class="alert alert-danger fill-parent" th:if="${param.duplicationCredentialUserNameError}">
+                <h1 class="display-5">Error</h1>
+                <span>A credential with this user name already exists. Please select a different user name. Click <a id="user-name-redirect" th:href="@{/home}">here</a> to continue.</span>
+            </div>
+            <div class="alert alert-danger fill-parent" th:if="${param.missingCredentialsError}">
+                <h1 class="display-5">Error</h1>
+                <span>Some or all credentials information were missing. Please fill out the form completely. Click <a id="missing-credential-redirect" th:href="@{/home}">here</a> to continue.</span>
+            </div>
             <div class="alert alert-danger fill-parent" th:if="${param.badCredentialsError}">
                 <h1 class="display-5">Error</h1>
                 <span>Wrong username or password. Click <a id="bad-credentials-redirect" th:href="@{/home}">here</a> to continue.</span>

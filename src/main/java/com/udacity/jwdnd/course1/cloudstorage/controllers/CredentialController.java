@@ -21,8 +21,11 @@ public class CredentialController {
             Integer credentialId = credentialForm.getCredentialId();
             if(credentialId != null){
                 credentialService.editCredential(credentialForm);
-            } else {
+            }
+            if(credentialService.getIsUserNameAvailable(credentialForm.getCredentialUsername())) {
                 credentialService.addCredential(credentialForm);
+            } else {
+                return "redirect:/result?duplicationCredentialUserNameError}";
             }
             return "redirect:/result?success=true";
         } catch (Exception error){
