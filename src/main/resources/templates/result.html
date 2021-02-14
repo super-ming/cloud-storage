@@ -12,23 +12,23 @@
         <div class="container justify-content-center w-50 p-3" style="margin-top: 5em;">
             <div class="alert alert-success fill-parent" th:if="${param.success}">
                 <h1 class="display-5">Success</h1>
-                <span>Your changes were successfully saved. Click <a th:href="@{/home}" >here</a> to continue.</span>
+                <span>Your changes were successfully saved. Click <a id="success-redirect" th:href="@{/home}" >here</a> to continue.</span>
             </div>
             <div class="alert alert-danger fill-parent" th:if="${param.error}">
                 <h1 class="display-5">Error</h1>
-                <span>Your changes were not saved. Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span>Your changes were not saved. Click <a id="error-redirect" th:href="@{/home}">here</a> to continue.</span>
             </div>
             <div class="alert alert-danger fill-parent" th:if="${param.noFileError}">
                 <h1 class="display-5">Error</h1>
-                <span>You did not select a file to upload. Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span>You did not select a file to upload. Click <a id="no-file-redirect"th:href="@{/home}">here</a> to continue.</span>
             </div>
             <div class="alert alert-danger fill-parent" th:if="${param.duplicationFileNameError}">
                 <h1 class="display-5">Error</h1>
-                <span>A file with this name already exists. Please select a different file name. Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span>A file with this name already exists. Please select a different file name. Click <a id="file-name-redirect" th:href="@{/home}">here</a> to continue.</span>
             </div>
             <div class="alert alert-danger fill-parent" th:if="${param.badCredentialsError}">
                 <h1 class="display-5">Error</h1>
-                <span>Wrong username or password. Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span>Wrong username or password. Click <a id="bad-credentials-redirect" th:href="@{/home}">here</a> to continue.</span>
             </div>
             <div class="alert alert-danger fill-parent" th:if="${error}">
                 <h1 class="display-5">Error</h1>

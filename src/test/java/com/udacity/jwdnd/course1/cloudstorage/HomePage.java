@@ -2,6 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage;
 
 import com.udacity.jwdnd.course1.cloudstorage.models.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.models.Note;
+import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -51,6 +52,9 @@ public class HomePage {
 
     @FindBy(id="saveNoteChanges")
     private WebElement noteSubmitButton;
+
+    @FindBy(id="closeNoteModal")
+    private WebElement closeNoteModalButton;
 
     @FindBy(id="edit-note")
     private List<WebElement> editNoteButton;
@@ -103,45 +107,36 @@ public class HomePage {
             e.printStackTrace();
         }
         wait.until(ExpectedConditions.visibilityOf(notesTab)).click();
-        Note firstNote = new Note(parseInt(noteId.getText()), noteTitleList.get(0).getText(), noteDescriptionList.get(0).getText(), 1);
+
+        editNoteButton.get(0).click();
+        Integer firstNoteId = parseInt(noteId.getAttribute("value"));
+        Note firstNote = new Note(firstNoteId, noteTitleList.get(0).getText(), noteDescriptionList.get(0).getText(), 1);
         return firstNote;
     }
 
-    public void addNote(WebDriver driver, String title, String description, WebElement nav){
+    public void addNote(WebDriver driver, String title, String description){
         WebDriverWait wait = new WebDriverWait(driver, 10);
 
-        try {
-            wait.until(ExpectedConditions.visibilityOf(notesTab)).click();
-        } catch (TimeoutException ex) {
-            System.out.println("Timeout Exception");
-            nav.click();
-            wait.until(ExpectedConditions.visibilityOf(notesTab)).click();
-        }
-        wait.until(ExpectedConditions.visibilityOf(addNoteButton)).click();
+        wait.until(ExpectedConditions.visibilityOf(notesTab)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(addNoteButton)).click();
 
         wait.until(ExpectedConditions.visibilityOf(noteTitleInput)).sendKeys(title);
         wait.until(ExpectedConditions.visibilityOf(noteDescriptionInput)).sendKeys(description);
 
         wait.until(ExpectedConditions.visibilityOf(noteSubmitButton)).click();
-
-        wait.until(ExpectedConditions.visibilityOf(notesTab)).click();
     }
 
-    public void editNote(WebDriver driver, String title, String description, WebElement nav){
+    public void editNote(WebDriver driver, String title, String description){
         WebDriverWait wait = new WebDriverWait(driver, 10);
-
-        wait.until(ExpectedConditions.visibilityOf(notesTab)).click();
-        wait.until(ExpectedConditions.visibilityOf((editNoteButton.get(0)))).click();
 
         wait.until(ExpectedConditions.visibilityOf(noteTitleInput));
         noteTitleInput.clear();
         noteTitleInput.sendKeys(title);
         wait.until(ExpectedConditions.visibilityOf(noteDescriptionInput));
-        noteTitleInput.clear();
-        noteTitleInput.sendKeys(description);
+        noteDescriptionInput.clear();
+        noteDescriptionInput.sendKeys(description);
 
         wait.until(ExpectedConditions.visibilityOf(noteSubmitButton)).click();
-        wait.until(ExpectedConditions.visibilityOf(notesTab)).click();
     }
 
     public void deleteNote(WebDriver driver){
@@ -186,14 +181,14 @@ public class HomePage {
         return firstCredential;
     }
 
-    public void addCredential(WebDriver driver, String url, String username, String password, WebElement nav){
+    public void addCredential(WebDriver driver, String url, String username, String password){
         WebDriverWait wait = new WebDriverWait(driver, 10);
 
         try {
             wait.until(ExpectedConditions.visibilityOf(credentialsTab)).click();
         } catch (TimeoutException ex) {
             System.out.println("Timeout Exception");
-            nav.click();
+            credentialsTab.click();
             wait.until(ExpectedConditions.visibilityOf(credentialsTab)).click();
         }
         wait.until(ExpectedConditions.visibilityOf(addCredentialButton)).click();
@@ -206,7 +201,7 @@ public class HomePage {
         wait.until(ExpectedConditions.visibilityOf(credentialsTab)).click();
     }
 
-    public void editCredential(WebDriver driver, String url, String username, String password, WebElement nav){
+    public void editCredential(WebDriver driver, String url, String username, String password){
         WebDriverWait wait = new WebDriverWait(driver, 10);
 
         wait.until(ExpectedConditions.visibilityOf(credentialsTab)).click();
@@ -230,7 +225,6 @@ public class HomePage {
         WebDriverWait wait = new WebDriverWait(driver, 10);
 
         wait.until(ExpectedConditions.visibilityOf(credentialsTab)).click();
-
         wait.until(ExpectedConditions.visibilityOf(deleteCredentialButton.get(0))).click();
     }
 
