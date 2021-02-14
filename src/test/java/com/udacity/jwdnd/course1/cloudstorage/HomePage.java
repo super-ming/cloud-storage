@@ -109,8 +109,8 @@ public class HomePage {
         wait.until(ExpectedConditions.visibilityOf(notesTab)).click();
 
         editNoteButton.get(0).click();
-        Integer firstNoteId = parseInt(noteId.getAttribute("value"));
-        Note firstNote = new Note(firstNoteId, noteTitleList.get(0).getText(), noteDescriptionList.get(0).getText(), 1);
+        Note firstNote = new Note(parseInt(noteId.getAttribute("value")), noteTitleList.get(0).getText(), noteDescriptionList.get(0).getText(), 1);
+
         return firstNote;
     }
 
@@ -163,34 +163,26 @@ public class HomePage {
         return Base64.getEncoder().encodeToString(encryptedValue);
     }
 
-    public Credential getCredential(WebDriver driver){
+    public Credential getFirstCredential(WebDriver driver){
         WebDriverWait wait = new WebDriverWait(driver, 10);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);
         } catch(InterruptedException e){
             e.printStackTrace();
         }
-        wait.until(ExpectedConditions.visibilityOf(credentialsTab)).click();
+        editCredentialButton.get(0).click();
         SecureRandom random = new SecureRandom();
         byte[] key = new byte[16];
         random.nextBytes(key);
         String encodedKey = Base64.getEncoder().encodeToString(key);
         String newKey = encryptValue(credentialPasswordList.get(0).getText(),encodedKey);
-        Credential firstCredential = new Credential(parseInt(credentialIdInput.getText()), credentialUrlList.get(0).getText(),
+        Credential firstCredential = new Credential(parseInt(credentialIdInput.getAttribute("value")), credentialUrlList.get(0).getText(),
                 credentialUsernameList.get(0).getText(), newKey, credentialPasswordList.get(0).getText(), 1);
         return firstCredential;
     }
 
     public void addCredential(WebDriver driver, String url, String username, String password){
         WebDriverWait wait = new WebDriverWait(driver, 10);
-
-        try {
-            wait.until(ExpectedConditions.visibilityOf(credentialsTab)).click();
-        } catch (TimeoutException ex) {
-            System.out.println("Timeout Exception");
-            credentialsTab.click();
-            wait.until(ExpectedConditions.visibilityOf(credentialsTab)).click();
-        }
         wait.until(ExpectedConditions.visibilityOf(addCredentialButton)).click();
 
         wait.until(ExpectedConditions.visibilityOf(credentialUrlInput)).sendKeys(url);
@@ -198,27 +190,21 @@ public class HomePage {
         wait.until(ExpectedConditions.visibilityOf(credentialPasswordInput)).sendKeys(password);
 
         wait.until(ExpectedConditions.visibilityOf(saveCredentialButton)).click();
-        wait.until(ExpectedConditions.visibilityOf(credentialsTab)).click();
     }
 
     public void editCredential(WebDriver driver, String url, String username, String password){
         WebDriverWait wait = new WebDriverWait(driver, 10);
 
-        wait.until(ExpectedConditions.visibilityOf(credentialsTab)).click();
-        wait.until(ExpectedConditions.visibilityOf((editCredentialButton.get(0)))).click();
-
         wait.until(ExpectedConditions.visibilityOf(credentialUrlInput));
-        noteTitleInput.clear();
-        noteTitleInput.sendKeys(url);
+        credentialUrlInput.clear();
+        credentialUrlInput.sendKeys(url);
         wait.until(ExpectedConditions.visibilityOf(credentialUsernameInput));
-        noteTitleInput.clear();
-        noteTitleInput.sendKeys(username);
+        credentialUsernameInput.clear();
+        credentialUsernameInput.sendKeys(username);
         wait.until(ExpectedConditions.visibilityOf(credentialPasswordInput));
-        noteTitleInput.clear();
-        noteTitleInput.sendKeys(password);
-
+        credentialPasswordInput.clear();
+        credentialPasswordInput.sendKeys(password);
         wait.until(ExpectedConditions.visibilityOf(saveCredentialButton)).click();
-        wait.until(ExpectedConditions.visibilityOf(credentialsTab)).click();
     }
 
     public void deleteCredential(WebDriver driver){
