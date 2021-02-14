@@ -39,7 +39,7 @@ public class FileController {
         if(file.isEmpty()){
             return "redirect:/result?noFileError=true";
         } else if(!fileService.getIsFileNameAvailable(file.getOriginalFilename())){
-            return "redirect:/result?duplicationFileNameError=true";
+            return "redirect:/result?duplicateFileNameError=true";
         }
 
         try {

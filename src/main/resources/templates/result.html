@@ -22,11 +22,11 @@
                 <h1 class="display-5">Error</h1>
                 <span>You did not select a file to upload. Click <a id="no-file-redirect"th:href="@{/home}">here</a> to continue.</span>
             </div>
-            <div class="alert alert-danger fill-parent" th:if="${param.duplicationFileNameError}">
+            <div class="alert alert-danger fill-parent" th:if="${param.duplicateFileNameError}">
                 <h1 class="display-5">Error</h1>
                 <span>A file with this name already exists. Please select a different file name. Click <a id="file-name-redirect" th:href="@{/home}">here</a> to continue.</span>
             </div>
-            <div class="alert alert-danger fill-parent" th:if="${param.duplicationCredentialUserNameError}">
+            <div class="alert alert-danger fill-parent" th:if="${param.duplicateCredentialUserNameError}">
                 <h1 class="display-5">Error</h1>
                 <span>A credential with this user name already exists. Please select a different user name. Click <a id="user-name-redirect" th:href="@{/home}">here</a> to continue.</span>
             </div>

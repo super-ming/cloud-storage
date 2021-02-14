@@ -25,7 +25,7 @@ public class CredentialController {
             if(credentialService.getIsUserNameAvailable(credentialForm.getCredentialUsername())) {
                 credentialService.addCredential(credentialForm);
             } else {
-                return "redirect:/result?duplicationCredentialUserNameError}";
+                return "redirect:/result?duplicateCredentialUserNameError";
             }
             return "redirect:/result?success=true";
         } catch (Exception error){
