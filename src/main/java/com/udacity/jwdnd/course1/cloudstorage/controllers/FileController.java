@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class FileController {
@@ -35,30 +36,36 @@ public class FileController {
     }
 
     @PostMapping("/file/upload")
-    public String handleFileUpload(@RequestParam("fileUpload") MultipartFile file) throws Exception {
+    public String handleFileUpload(@RequestParam("fileUpload") MultipartFile file, RedirectAttributes redirectAttributes) throws Exception {
         if(file.isEmpty()){
-            return "redirect:/result?noFileError=true";
+            redirectAttributes.addAttribute("noFileError", true);
+            return "redirect:/result";
         } else if(!fileService.getIsFileNameAvailable(file.getOriginalFilename())){
-            return "redirect:/result?duplicateFileNameError=true";
+            redirectAttributes.addAttribute("duplicateFileNameError", true);
+            return "redirect:/result";
         }
 
         try {
             fileService.addFile(file);
         } catch (Exception error){
             error.printStackTrace();
-            return "redirect:/result?success=error";
+            redirectAttributes.addAttribute("error", true);
+            return "redirect:/result";
         }
-        return "redirect:/result?success=true";
+        redirectAttributes.addAttribute("success", true);
+        return "redirect:/result";
     }
 
     @GetMapping("/files/delete/{fileName}")
-    public String deleteFile(@PathVariable String fileName){
+    public String deleteFile(@PathVariable String fileName, RedirectAttributes redirectAttributes){
         try {
             fileService.deleteFile(fileName);
-            return "redirect:/result?success=true";
+            redirectAttributes.addAttribute("success", true);
+            return "redirect:/result";
         } catch (Exception error){
             error.printStackTrace();
-            return "redirect:/result?success=error";
+            redirectAttributes.addAttribute("error", true);
+            return "redirect:/result";
         }
 
     }

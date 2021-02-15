@@ -18,6 +18,10 @@
             <h1 class="display-5">Error</h1>
             <span>Something went wrong. Click <a id="internal-error-redirect" th:href="@{/home}">here</a> to continue.</span>
         </div>
+        <div class="alert alert-danger fill-parent" th:if="${param.maxFileSizeError}">
+            <h1 class="display-5">Error</h1>
+            <span>The file you selected was too large. Please select a file with a size of less than 10Mb. Click <a id="max-size-error-redirect" th:href="@{/home}">here</a> to continue.</span>
+        </div>
     </div>
     </body>
 </html>
