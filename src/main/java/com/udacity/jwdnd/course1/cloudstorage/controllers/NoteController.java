@@ -34,7 +34,7 @@ public class NoteController {
     }
 
     @GetMapping("/notes/edit")
-    public String editNote(@ModelAttribute("noteForm") NoteForm noteForm, Model model){
+    public String editNote(@ModelAttribute("noteForm") NoteForm noteForm){
         try {
             noteService.editNote(noteForm);
             return "redirect:/result?success";

@@ -51,7 +51,6 @@ public class NoteService {
     public int editNote(NoteForm noteForm){
         User user = authenticationService.getAuthenticatedUser();
         try {
-            Note note = noteMapper.getNote(user.getUserId(), noteForm.getNoteId());
             Integer updatedStatus = noteMapper.editNote(noteForm.getNoteId(), noteForm.getNoteTitle(), noteForm.getNoteDescription(), user.getUserId());
             return updatedStatus;
         } catch (Exception error) {
