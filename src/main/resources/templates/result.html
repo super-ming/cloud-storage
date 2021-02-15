@@ -38,6 +38,10 @@
                 <h1 class="display-5">Error</h1>
                 <span>Wrong username or password. Click <a id="bad-credentials-redirect" th:href="@{/home}">here</a> to continue.</span>
             </div>
+            <div class="alert alert-danger fill-parent" th:if="${param.databaseError}">
+                <h1 class="display-5">Error</h1>
+                <span>Something went wrong while updating the database. Click <a id="database-redirect" th:href="@{/home}">here</a> to try again.</span>
+            </div>
         </div>
     </body>
 </html>

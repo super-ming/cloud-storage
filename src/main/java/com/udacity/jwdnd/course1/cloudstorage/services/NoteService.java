@@ -7,6 +7,7 @@ import com.udacity.jwdnd.course1.cloudstorage.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -36,24 +37,32 @@ public class NoteService {
         return noteMapper.getNotes(user.getUserId());
     }
 
-    public int addNote(NoteForm noteForm){
+    public int addNote(NoteForm noteForm) throws SQLException {
         User user = authenticationService.getAuthenticatedUser();
         try {
             Integer newNoteId = noteMapper.insertNote(new Note(null, noteForm.getNoteTitle(), noteForm.getNoteDescription(),
                     user.getUserId()));
-            return newNoteId;
-        } catch (Exception error) {
+            if (newNoteId > 1) {
+                return newNoteId;
+            } else {
+                throw new SQLException("Can't save changes to database");
+            }
+        } catch (SQLException error) {
             error.printStackTrace();
             return -1;
         }
     }
 
-    public int editNote(NoteForm noteForm){
+    public int editNote(NoteForm noteForm) throws SQLException{
         User user = authenticationService.getAuthenticatedUser();
         try {
             Integer updatedStatus = noteMapper.editNote(noteForm.getNoteId(), noteForm.getNoteTitle(), noteForm.getNoteDescription(), user.getUserId());
-            return updatedStatus;
-        } catch (Exception error) {
+            if (updatedStatus> 0) {
+                return updatedStatus;
+            } else {
+                throw new SQLException("Can't save changes to database");
+            }
+        } catch (SQLException error) {
             error.printStackTrace();
             return -1;
         }
